@@ -24,7 +24,6 @@ export const updateComposer = async (id: number, composer: Composer): Promise<Co
     return response.data
 }
 
-export const deleteComposer = async (id: number) => {
-    const response = await axios.delete(`${path}/${id}`);
-    return response.data
+export const deleteComposer = async (id: number): Promise<void> => {
+    await axios.delete(`${path}/${id}`);
 }

@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Container, Typography, List, ListItem, ListItemButton, ListItemText, Paper, Alert, AlertTitle } from '@mui/material';
-import { Genre } from '../../api/genres/Genre'; // Assuming you have a types file
-import { getGenre, getGenreById } from '../../api/genres/genreApi'; // Assuming you have an api file
+import { Container,
+    Typography, List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Paper,
+    Alert,
+    AlertTitle } from '@mui/material';
+import { Genre } from '../../api/genres/Genre';
+import { getGenre } from '../../api/genres/genreApi';
 
-const GenresComponent = () => {
+const Genres = () => {
     const [genres, setGenres] = useState<Genre[]>([]);
     const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -21,36 +28,38 @@ const GenresComponent = () => {
         fetchGenres();
     }, []);
 
-    const handleGenreClick = async (id: number) => {
-        try {
-            const data = await getGenreById(id);
-            setSelectedGenre(data);
+    const handleGenreClick = (id: number) => {
+        const foundGenre = genres.find((genre) => genre.id === id);
+
+        if (foundGenre) {
+            setSelectedGenre(foundGenre);
             setError(null);
-        } catch (error: any) {
-            setError(`Ошибка при получении жанра с ID ${id}: ${error.message}`);
+        } else {
+            setError(`Жанр с ID ${id} не найден.`);
             setSelectedGenre(null);
         }
     };
 
     const containerStyle = {
         marginTop: '32px',
-        paddingBottom: '20px'
+        paddingBottom: '20px',
+        textAlign: 'center'
     };
 
     const listStyle = {
         width: '100%',
         maxWidth: '360px',
-        backgroundColor: '#f5f5f5', // theme.palette.background.paper (assuming default light theme)
+        backgroundColor: '#f5f5f5',
         margin: 'auto'
     };
 
     const selectedGenrePaperStyle = {
-        padding: '16px', // theme.spacing(2) = 2 * 8 = 16
-        marginTop: '16px', // theme.spacing(2) = 2 * 8 = 16
+        padding: '16px',
+        marginTop: '16px',
     };
 
     const errorAlertStyle = {
-        marginBottom: '16px', // theme.spacing(2) = 2 * 8 = 16
+        marginBottom: '16px',
     };
 
     return (
@@ -93,4 +102,4 @@ const GenresComponent = () => {
     );
 };
 
-export default GenresComponent;
+export default Genres;

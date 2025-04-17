@@ -46,6 +46,9 @@ const Navbar = () => {
                         <Link to="/playlists" className={classes.link}>
                             <Button color="inherit">Плейлисты</Button>
                         </Link>
+                        <Link to="/genres" className={classes.link}>
+                            <Button color="inherit">Жанры</Button>
+                        </Link>
                         {/*  Добавьте другие кнопки с ссылками здесь */}
                     </Box>
                 </Toolbar>

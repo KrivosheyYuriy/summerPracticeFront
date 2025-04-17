@@ -3,30 +3,36 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound.tsx';
 import Footer from './components/footer/Footer';
-import GenresComponent from './components/genre/GenresComponent';
+import Genres from './components/genre/Genres.tsx';
 import Navbar from './components/navbar/Navbar';
+import Composers from "./components/composer/Composers.tsx";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
     return (
         <Router>
             <div className="app-container">
+                <QueryClientProvider client={queryClient} >
                 <Navbar />
                 <div className="content-container">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/albums" />
                         <Route path="/album/:id" />
-                        <Route path="/composers" />
+                        <Route path="/composers" element={<Composers />}/>
                         <Route path="/composer/:id" />
                         <Route path="/playlists" />
                         <Route path="/playlist/:id" />
                         <Route path="/tracks" />
                         <Route path="/track/:id" />
-                        <Route path="/genres" element={<GenresComponent />} />
+                        <Route path="/genres" element={<Genres />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
                 </div>
                 <Footer />
+                </QueryClientProvider>
             </div>
         </Router>
     );
