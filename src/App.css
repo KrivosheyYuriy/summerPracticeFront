@@ -16,5 +16,5 @@ body {
 
 .content-container {
     flex-grow: 1;
-    width: 100%;
+    padding: 30px;
 }

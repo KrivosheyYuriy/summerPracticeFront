@@ -13,9 +13,25 @@ export const getTrackById = async (id: number): Promise<Track> => {
     return response.data
 }
 
-export const addTrack = async (track: Track): Promise<Track> => {
-    const response = await axios.post(path, track);
-    return response.data
+export const addTrack = async (track: Track, audio: File): Promise<Track> => {
+    const formData = new FormData();
+
+    formData.append("track", new Blob([JSON.stringify(track)], {type: "application/json"}));
+    formData.append("audioFile", audio);
+    try {
+        const response = await axios.post(path, formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        console.log(response.data)
+        return response.data
+    }
+    catch (error) {
+        console.error('Error adding track:', error);
+        throw error;
+    }
 }
 
 export const updateTrack = async (id: number, track: Track): Promise<Track> => {

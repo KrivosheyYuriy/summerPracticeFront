@@ -1,9 +1,9 @@
 export type Track = {
     id?: number;
     title: string;
-    filename: string;
+    filename?: string;
     description?: string;
-    durationSeconds: number;
+    durationSeconds?: number;
     genresId: number[];
     composersId: number[];
     albumsId: number[];

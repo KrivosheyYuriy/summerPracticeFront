@@ -5,15 +5,8 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {DataGrid, GridColDef, GridCellParams} from "@mui/x-data-grid";
-import {styled} from '@mui/material/styles';
 import EditComposer from "./EditComposer.tsx";
-
-const StyledDataGrid = styled(DataGrid)(({theme}) => ({
-    '& .MuiDataGrid-main': {
-        paddingLeft: theme.spacing(2), // Отступ слева
-        paddingRight: theme.spacing(2), // Отступ справа
-    },
-}));
+import AddComposer from "./AddComposer.tsx";
 
 
 const Composers = () => {
@@ -93,7 +86,8 @@ const Composers = () => {
 
     return (
         <>
-            <StyledDataGrid // Используем стилизованный DataGrid
+            <AddComposer />
+            <DataGrid // Используем стилизованный DataGrid
                 rows={data}
                 columns={columns}
                 getRowId={row => row.id}

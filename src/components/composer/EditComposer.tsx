@@ -2,14 +2,12 @@ import {useState} from "react";
 import {Composer} from "../../api/composers/Composer.ts";
 import EditIcon from '@mui/icons-material/Edit';
 import {IconButton, Tooltip, Dialog, DialogTitle,
-    DialogActions, Button, DialogContent, Stack, TextField } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+    DialogActions, Button} from "@mui/material";
 import {updateComposer} from "../../api/composers/composerApi.ts";
 import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {useQueryClient} from "@tanstack/react-query";
 import * as React from "react";
+import ComposerDialogContent from "./ComposerDialogContent.tsx";
 
 
 const EditComposer = (composerData: Composer) => {
@@ -84,7 +82,7 @@ const EditComposer = (composerData: Composer) => {
 
     return(
         <>
-            <Tooltip title="Edit car">
+            <Tooltip title="Изменение композитора">
                 <IconButton aria-label="edit" size="small" onClick={handleClickOpen}>
                     <EditIcon fontSize= "small" />
                 </IconButton>
@@ -92,32 +90,12 @@ const EditComposer = (composerData: Composer) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit car</DialogTitle>
 
-                <DialogContent>
-                    <Stack spacing={2} mt={1}>
-                        <TextField label="Имя" name="name"
-                                   value={composer.name} onChange={handleChange}/>
-                        <TextField label="Фамилия" name="surname"
-                                   value={composer.surname} onChange={handleChange}/>
-                        <TextField label="Отчество" name="fatherName"
-                                   value={composer.fatherName} onChange={handleChange}/>
-
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                                label="Дата рождения"
-                                value={composer.birthday ? dayjs(composer.birthday) : null} // Convert back to Dayjs object for display
-                                onChange={handleBirthdayChange}
-                                renderInput={(props) => <TextField {...props} />}
-                            />
-                        </LocalizationProvider>
-
-                        <TextField label="Биография" name="biography"
-                                   value={composer.biography} onChange={handleChange}/>
-                    </Stack>
-                </DialogContent>
+                <ComposerDialogContent composer={composer} handleChange={handleChange}
+                                       handleBirthdayChange={handleBirthdayChange}/>
 
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleSave}>Save</Button>
+                    <Button onClick={handleClose}>Закрыть</Button>
+                    <Button onClick={handleSave}>Сохранить</Button>
                 </DialogActions>
             </Dialog>
         </>
