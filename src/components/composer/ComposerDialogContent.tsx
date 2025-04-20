@@ -24,7 +24,7 @@ const ComposerDialogContent =
                     <TextField required label="Фамилия" name="surname"
                                value={composer.surname} onChange={handleChange}/>
                     <TextField label="Отчество" name="fatherName"
-                               value={composer.fatherName} onChange={handleChange}/>
+                               value={composer.fatherName != null ? composer.fatherName : ''} onChange={handleChange}/>
 
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
@@ -36,7 +36,7 @@ const ComposerDialogContent =
                     </LocalizationProvider>
 
                     <TextField label="Биография" name="biography"
-                               value={composer.biography} onChange={handleChange}/>
+                               value={composer.biography != null ? composer.biography : ''} onChange={handleChange}/>
                 </Stack>
             </DialogContent>
         </>

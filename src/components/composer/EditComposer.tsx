@@ -88,7 +88,7 @@ const EditComposer = (composerData: Composer) => {
                 </IconButton>
             </Tooltip>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit car</DialogTitle>
+                <DialogTitle>Edit composer</DialogTitle>
 
                 <ComposerDialogContent composer={composer} handleChange={handleChange}
                                        handleBirthdayChange={handleBirthdayChange}/>

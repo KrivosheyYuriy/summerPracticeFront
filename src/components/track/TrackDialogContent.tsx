@@ -2,16 +2,17 @@ import {DialogContent, Stack, TextField} from "@mui/material";
 
 import * as React from "react";
 import {Track} from "../../api/tracks/Track.ts";
+import GenreSelect from "../genre/GenreSelect.tsx";
 
 type DialogFormProps = {
     track: Track;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleGenreChange: (genres: number[]) => void;
 }
 
 const TrackDialogContent =
-    ({track, handleChange, handleFileChange}: DialogFormProps) => {
-
+    ({track, handleChange, handleFileChange, handleGenreChange}: DialogFormProps) => {
         return (
             <>
                 <DialogContent>
@@ -21,7 +22,8 @@ const TrackDialogContent =
 
 
                         <TextField required label="Описание" name="description"
-                                   value={track.description} onChange={handleChange}/>
+                                   value={track.description != null ? track.description : ''} onChange={handleChange}/>
+                        <GenreSelect onChange={handleGenreChange} initialValues={track.genresId}/>
 
                         <input
                             accept="audio/*"

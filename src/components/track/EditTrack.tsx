@@ -12,6 +12,7 @@ import {updateTrack} from "../../api/tracks/trackApi.ts";
 const EditTrack = (trackData: Track) => {
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
+    const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [track, setTrack] = useState<Track>({
         id: undefined,
@@ -47,7 +48,8 @@ const EditTrack = (trackData: Track) => {
         }
 
         try {
-            await updateTrack(track.id, track);
+            const newTrack = {...track, genresId: selectedGenres};
+            await updateTrack(track.id, newTrack , selectedFile!);
 
         } catch (error) {
             console.error("Error updating composer:", error);
@@ -73,6 +75,11 @@ const EditTrack = (trackData: Track) => {
         }
     };
 
+    const handleGenreChange = (genres: number[]) => {
+        setSelectedGenres(genres);
+        console.log('Selected Genres in Parent:', genres); // Do something with the selected genres
+    };
+
     return(
         <>
             <Tooltip title="Изменение Трека">
@@ -81,10 +88,10 @@ const EditTrack = (trackData: Track) => {
                 </IconButton>
             </Tooltip>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Edit car</DialogTitle>
+                <DialogTitle>Edit track</DialogTitle>
 
                 <TrackDialogContent track={track} handleChange={handleChange}
-                                       handleFileChange={handleFileChange}/>
+                                       handleFileChange={handleFileChange} handleGenreChange={handleGenreChange}/>
 
                 <DialogActions>
                     <Button onClick={handleClose}>Закрыть</Button>

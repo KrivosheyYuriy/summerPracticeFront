@@ -1,5 +1,6 @@
 import {Track} from "../api/tracks/Track";
 import {getComposerById} from "../api/composers/composerApi.ts";
+import {getGenreById} from "../api/genres/genreApi.ts";
 
 
 export const createComposerNameMap = async (data: Track[] | undefined):
@@ -32,6 +33,43 @@ export const createComposerNameMap = async (data: Track[] | undefined):
             newMap[id] = `${composer.surname} ${composer.name} ${composer.fatherName}`;
         } else {
             newMap[id] = "Unknown Composer";
+        }
+    });
+
+    return newMap;
+};
+
+
+export const createGenreMap = async (data: Track[] | undefined):
+    Promise<{[genreId: number]: string}> => {
+
+    if (!data) {
+        return {}; // Или другое значение по умолчанию, если data null
+    }
+
+    const allGenreIds = new Set<number>();
+    data.forEach(track => {
+        track.genresId.forEach(id => allGenreIds.add(id));
+    });
+
+    const genreIdArray = Array.from(allGenreIds);
+
+    const results = await Promise.all(genreIdArray.map(async genreId => {
+        try {
+            const genre = await getGenreById(genreId);
+            return { id: genreId, genre };
+        } catch (error) {
+            console.error(`Error fetching genre ${genreId}:`, error);
+            return { id: genreId, genre: null };
+        }
+    }));
+
+    const newMap: { [genreId: number]: string } = {};
+    results.forEach(({ id, genre }) => {
+        if (genre) {
+            newMap[id] = genre.title;
+        } else {
+            newMap[id] = "Unknown Genre";
         }
     });
 
