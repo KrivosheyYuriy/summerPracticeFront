@@ -9,6 +9,7 @@ import {addTrack} from "../../api/tracks/trackApi.ts";
 const AddTrack = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+    const [selectedComposers, setSelectedComposers] = useState<number[]>([]);
 
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
@@ -38,9 +39,14 @@ const AddTrack = () => {
         console.log('Selected Genres in Parent:', genres); // Do something with the selected genres
     };
 
+    const handleComposerChange = (genres: number[]) => {
+        setSelectedComposers(genres);
+        console.log('Selected Composers in Parent:', genres); // Do something with the selected genres
+    };
+
     const handleSave = async () => {
         try {
-            const newTrack = {...track, genresId: selectedGenres};
+            const newTrack = {...track, genresId: selectedGenres, composersId: selectedComposers};
             await addTrack(newTrack, selectedFile!);
 
             // Optionally:  Show a success message to the user
@@ -69,7 +75,9 @@ const AddTrack = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Новый Трек:</DialogTitle>
                 <TrackDialogContent track={track} handleChange={handleChange}
-                                    handleFileChange={handleFileChange} handleGenreChange={handleGenreChange}/>
+                                    handleFileChange={handleFileChange}
+                                    handleGenreChange={handleGenreChange}
+                                    handleComposerChange={handleComposerChange}/>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleSave}>Save</Button>

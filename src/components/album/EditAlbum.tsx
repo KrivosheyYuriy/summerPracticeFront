@@ -12,6 +12,7 @@ import {updateAlbum} from "../../api/albums/albumApi.ts";
 
 const EditAlbum = (albumData: Album) => {
     const queryClient = useQueryClient();
+    const [selectedTracks, setSelectedTracks] = useState<number[]>([]);
     const [open, setOpen] = useState(false);
     const [album, setAlbum] = useState<Album>({
         id: undefined, // нужно?
@@ -46,7 +47,7 @@ const EditAlbum = (albumData: Album) => {
             // Convert birthday back to string format if needed by the API
             const releaseString = dayjs(album.releaseDate).format('YYYY-MM-DD'); // Or whatever format your API expects
 
-            const updatedAlbumData = { ...albumData, releaseDate: releaseString };
+            const updatedAlbumData = { ...albumData, releaseDate: releaseString, tracksId: selectedTracks };
 
             await updateAlbum(album.id, updatedAlbumData);
 
@@ -65,6 +66,11 @@ const EditAlbum = (albumData: Album) => {
     const handleChange = (event : React.ChangeEvent<HTMLInputElement>) => {
         setAlbum({...albumData, [event.target.name]: event.target.value});
     }
+
+    const handleTrackChange = (genres: number[]) => {
+        setSelectedTracks(genres);
+        console.log('Selected Genres in Parent:', genres); // Do something with the selected genres
+    };
 
     const handleDateChange = (date: Dayjs | null) => {
         if (date) {
@@ -87,7 +93,7 @@ const EditAlbum = (albumData: Album) => {
                 <DialogTitle>Edit album</DialogTitle>
 
                 <AlbumDialogContent album={album} handleChange={handleChange}
-                                       handleDateChange={handleDateChange}/>
+                                       handleDateChange={handleDateChange} handleTrackChange={handleTrackChange}/>
 
                 <DialogActions>
                     <Button onClick={handleClose}>Закрыть</Button>

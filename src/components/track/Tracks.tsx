@@ -134,9 +134,11 @@ const Tracks = () => {
             sortable: false,
             filterable: false,
             disableColumnMenu: true,
-            renderCell: () => {
+            renderCell: (params: GridCellParams) => {
                 return (
-                    <IconButton aria-label="download" size="small">
+                    <IconButton aria-label="download" size="small"
+                                component="a" href={`${import.meta.env.VITE_API_URL}/api/tracks/file/${params.row.id}`}
+                                target="_blank" rel="noopener noreferrer">
                         <FileDownload />
                     </IconButton>
                 )
@@ -144,11 +146,10 @@ const Tracks = () => {
         },
     ];
 
-
     if (!isSuccess) {
         return <span>Loading...</span>
     } else if (error) {
-        return <span>Error when fetching cars...</span>
+        return <span>Error when fetching data...</span>
     }
 
     return (
@@ -158,7 +159,7 @@ const Tracks = () => {
                 rows={data}
                 columns={columns}
                 getRowId={row => row.id}
-                sx={{width: '100%'}} // Занимает всю доступную ширину
+                sx={{width: '100%'}}
             />
             <Snackbar
                 open={open}
@@ -166,7 +167,6 @@ const Tracks = () => {
                 onClose={() => setOpen(false)}
                 message={errorMessage || "Трек удален"}/>
         </>
-
     );
 }
 

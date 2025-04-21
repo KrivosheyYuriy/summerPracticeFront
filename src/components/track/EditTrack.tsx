@@ -13,6 +13,7 @@ const EditTrack = (trackData: Track) => {
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
     const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+    const [selectedComposers, setSelectedComposers] = useState<number[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [track, setTrack] = useState<Track>({
         id: undefined,
@@ -48,7 +49,7 @@ const EditTrack = (trackData: Track) => {
         }
 
         try {
-            const newTrack = {...track, genresId: selectedGenres};
+            const newTrack = {...track, genresId: selectedGenres, composersId: selectedComposers};
             await updateTrack(track.id, newTrack , selectedFile!);
 
         } catch (error) {
@@ -80,6 +81,11 @@ const EditTrack = (trackData: Track) => {
         console.log('Selected Genres in Parent:', genres); // Do something with the selected genres
     };
 
+    const handleComposerChange = (genres: number[]) => {
+        setSelectedComposers(genres);
+        console.log('Selected Composers in Parent:', genres); // Do something with the selected genres
+    };
+
     return(
         <>
             <Tooltip title="Изменение Трека">
@@ -91,7 +97,9 @@ const EditTrack = (trackData: Track) => {
                 <DialogTitle>Edit track</DialogTitle>
 
                 <TrackDialogContent track={track} handleChange={handleChange}
-                                       handleFileChange={handleFileChange} handleGenreChange={handleGenreChange}/>
+                                       handleFileChange={handleFileChange}
+                                    handleGenreChange={handleGenreChange}
+                handleComposerChange={handleComposerChange}/>
 
                 <DialogActions>
                     <Button onClick={handleClose}>Закрыть</Button>

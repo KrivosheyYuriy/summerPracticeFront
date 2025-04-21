@@ -8,45 +8,45 @@ import {
 } from '@mui/material';
 
 import {CheckBoxOutlineBlank, CheckBox} from '@mui/icons-material';
-import {getGenre} from "../../api/genres/genreApi.ts";
-import {Genre} from "../../api/genres/Genre.ts";
+import {getTrack} from "../../api/tracks/trackApi.ts";
+import {Track} from "../../api/tracks/Track.ts";
 
-interface GenreMultiSelectProps {
-    onChange: (selectedGenres: number[]) => void;
+interface TrackMultiSelectProps {
+    onChange: (selectedTracks: number[]) => void;
     initialValues?: number[];
 }
 
-const GenreSelect: React.FC<GenreMultiSelectProps> = ({onChange, initialValues = []}) => {
-    const [genres, setGenres] = useState<Genre[]>([]);
+const TrackSelect: React.FC<TrackMultiSelectProps> = ({onChange, initialValues = []}) => {
+    const [tracks, setTracks] = useState<Track[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
-    const [selectedGenresId, setSelectedGenresId] = useState<number[]>(initialValues);
+    const [selectedTracks, setSelectedTracks] = useState<Track[]>([]);
+    const [selectedTracksId, setSelectedTracksId] = useState<number[]>(initialValues);
 
     useEffect(() => {
-        const fetchGenres = async () => {
+        const fetchTracks = async () => {
             try {
-                const data = await getGenre();
-                setGenres(data);
+                const data = await getTrack();
+                setTracks(data);
             } catch (error) {
-                console.error('Error fetching genres:', error);
+                console.error('Error fetching tracks:', error);
                 // Handle error appropriately (e.g., display an error message to the user)
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchGenres();
+        fetchTracks();
     }, []);
 
     useEffect(() => {
-        onChange(selectedGenresId);  // Notify parent component of changes with IDs
-    }, [selectedGenresId, onChange]);
+        onChange(selectedTracksId);  // Notify parent component of changes with IDs
+    }, [selectedTracksId, onChange]);
 
     useEffect(() => {
-        // Update selectedGenres based on selectedGenreIds
-        const newSelectedGenres = genres.filter(genre => selectedGenresId.includes(genre.id!));
-        setSelectedGenres(newSelectedGenres);
-    }, [selectedGenresId, genres]);
+        // Update selectedTracks based on selectedTrackIds
+        const newSelectedTracks = tracks.filter(track => selectedTracksId.includes(track.id!));
+        setSelectedTracks(newSelectedTracks);
+    }, [selectedTracksId, tracks]);
 
     const icon = <CheckBoxOutlineBlank fontSize="small"/>;
     const checkedIcon = <CheckBox fontSize="small"/>;
@@ -59,16 +59,16 @@ const GenreSelect: React.FC<GenreMultiSelectProps> = ({onChange, initialValues =
             ) : (
                 <Autocomplete
                     multiple
-                    options={genres}
-                    getOptionLabel={(genre) => genre.title}
-                    value={selectedGenres}
+                    options={tracks}
+                    getOptionLabel={(track) => `${track.title} (${track.durationSeconds}сек)`}
+                    value={selectedTracks}
                     onChange={(_event, newValue) => {
-                        const newSelectedGenreIds = newValue.map(genre => genre.id!);
-                        setSelectedGenresId(newSelectedGenreIds);
-                        setSelectedGenres(newValue);
+                        const newSelectedTrackIds = newValue.map(track => track.id!);
+                        setSelectedTracksId(newSelectedTrackIds);
+                        setSelectedTracks(newValue);
                     }}
                     disableCloseOnSelect
-                    renderOption={(props, genre, {selected}) => (
+                    renderOption={(props, track, {selected}) => (
                         <li {...props}>
                             <Checkbox
                                 icon={icon}
@@ -76,14 +76,14 @@ const GenreSelect: React.FC<GenreMultiSelectProps> = ({onChange, initialValues =
                                 style={{marginRight: 8}}
                                 checked={selected}
                             />
-                            {genre.title}
+                            {`${track.title} (${track.durationSeconds}сек)`}
                         </li>
                     )}
                     style={{width: 500}}
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label="Выберите жанры"
+                            label="Выберите треки"
                             variant="outlined"
                         />
                     )}
@@ -93,4 +93,4 @@ const GenreSelect: React.FC<GenreMultiSelectProps> = ({onChange, initialValues =
     );
 };
 
-export default GenreSelect;
+export default TrackSelect;

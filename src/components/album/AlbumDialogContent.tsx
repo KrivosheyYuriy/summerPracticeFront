@@ -5,14 +5,17 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers";
 import {Album} from "../../api/albums/Album";
+import TrackSelect from "../track/TrackSelect.tsx";
 
 type DialogFormProps = {
     album: Album;
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     handleDateChange: (date: Dayjs | null) => void;
+    handleTrackChange: (genres: number[]) => void;
 }
 
-const AlbumDialogContent = ({album, handleChange, handleDateChange}: DialogFormProps) => {
+const AlbumDialogContent = ({album, handleChange,
+                                handleDateChange, handleTrackChange}: DialogFormProps) => {
     return (
         <>
             <DialogContent>
@@ -20,10 +23,12 @@ const AlbumDialogContent = ({album, handleChange, handleDateChange}: DialogFormP
                     <TextField required label="Название" name="title"
                                value={album.title} onChange={handleChange}/>
 
+                    <TrackSelect onChange={handleTrackChange} initialValues={album.tracksId}/>
+
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Дата выпуска: "
-                            value={album.releaseDate ? dayjs(album.releaseDate) : null} // Convert back to Dayjs object for display
+                            value={album.releaseDate ? dayjs(album.releaseDate) : null}
                             onChange={handleDateChange}
                             renderInput={(props) => <TextField required {...props} />}
                         />

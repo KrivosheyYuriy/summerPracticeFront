@@ -9,6 +9,7 @@ import {addAlbum} from "../../api/albums/albumApi.ts";
 const AddAlbum = () => {
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
+    const [selectedTracks, setSelectedTracks] = useState<number[]>([]);
     const [album, setAlbum] = useState<Album>({
         title: '',
         description: '',
@@ -28,12 +29,17 @@ const AddAlbum = () => {
         setAlbum({...album, [event.target.name]: event.target.value});
     }
 
+    const handleTrackChange = (genres: number[]) => {
+        setSelectedTracks(genres);
+        console.log('Selected Genres in Parent:', genres); // Do something with the selected genres
+    };
+
     const handleSave = async () => {
         try {
             // Convert birthday back to string format if needed by the API
             const releaseString = dayjs(album.releaseDate).format('YYYY-MM-DD'); // Or whatever format your API expects
 
-            const updatedAlbumData = { ...album, releaseDate: releaseString };
+            const updatedAlbumData = { ...album, releaseDate: releaseString, tracksId: selectedTracks};
 
             await addAlbum(updatedAlbumData);
 
@@ -65,7 +71,7 @@ const AddAlbum = () => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Новый альбом:</DialogTitle>
                 <AlbumDialogContent album={album} handleChange={handleChange}
-                                       handleDateChange={handleDateChange}/>
+                                       handleDateChange={handleDateChange} handleTrackChange={handleTrackChange}/>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button onClick={handleSave}>Save</Button>

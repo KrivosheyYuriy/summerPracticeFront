@@ -12,6 +12,7 @@ import {updatePlaylist} from "../../api/playlists/playlistApi.ts";
 const EditPlaylist = (playlistData: Playlist) => {
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
+    const [selectedTracks, setSelectedTracks] = useState<number[]>([]);
     const [playlist, setPlaylist] = useState<Playlist>({
         id: undefined, // нужно?
         title: "",
@@ -40,7 +41,8 @@ const EditPlaylist = (playlistData: Playlist) => {
         }
 
         try {
-            await updatePlaylist(playlist.id, playlist);
+            const newPlaylist = {...playlist, tracksId: selectedTracks};
+            await updatePlaylist(playlist.id, newPlaylist);
 
             // Optionally:  Show a success message to the user
 
@@ -58,6 +60,11 @@ const EditPlaylist = (playlistData: Playlist) => {
         setPlaylist({...playlist, [event.target.name]: event.target.value});
     }
 
+    const handleTrackChange = (genres: number[]) => {
+        setSelectedTracks(genres);
+        console.log('Selected Genres in Parent:', genres); // Do something with the selected genres
+    };
+
     return(
         <>
             <Tooltip title="Изменение плейлиста">
@@ -68,7 +75,8 @@ const EditPlaylist = (playlistData: Playlist) => {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit playlist</DialogTitle>
 
-                <PlaylistDialogContent playlist={playlist} handleChange={handleChange}/>
+                <PlaylistDialogContent playlist={playlist} handleChange={handleChange}
+                                       handleTrackChange={handleTrackChange}/>
 
                 <DialogActions>
                     <Button onClick={handleClose}>Закрыть</Button>
