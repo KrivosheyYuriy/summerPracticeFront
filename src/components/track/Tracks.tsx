@@ -8,7 +8,8 @@ import {deleteTrack, getTrack} from "../../api/tracks/trackApi.ts";
 import AddTrack from "./AddTrack.tsx";
 import EditTrack from "./EditTrack.tsx";
 import {createComposerNameMap, createGenreMap} from "../../utils/trackUtil.ts"
-import {FileDownload, PlayArrow} from "@mui/icons-material";
+import {FileDownload} from "@mui/icons-material";
+import AudioButton from "./AudioButton.tsx";
 
 
 const Tracks = () => {
@@ -58,12 +59,9 @@ const Tracks = () => {
             sortable: false,
             filterable: false,
             disableColumnMenu: true,
-            renderCell: () => {
-                return (
-                    <IconButton aria-label="play/pause" size="small">
-                        <PlayArrow />
-                    </IconButton>
-                )
+            renderCell: (params: GridCellParams) => {
+                return <AudioButton
+                    audioUrl={`${import.meta.env.VITE_API_URL}/api/tracks/file/${params.row.id}`} />
             }
         },
         {field: 'title', headerName: 'Название', flex: 1}, // flex: 1 для равномерного распределения
