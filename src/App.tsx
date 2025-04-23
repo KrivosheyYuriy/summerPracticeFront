@@ -10,6 +10,9 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import Tracks from "./components/track/Tracks";
 import Playlists from "./components/playlist/Playlists.tsx";
 import Albums from "./components/album/Albums.tsx";
+import TrackList from "./components/track/TrackList.tsx";
+import {getTracksFromAlbum} from "./api/albums/albumApi.ts";
+import {getTracksFromPlaylist} from "./api/playlists/playlistApi.ts";
 
 const queryClient = new QueryClient();
 
@@ -23,13 +26,11 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/albums" element={<Albums />}/>
-                        <Route path="/album/:id" />
+                        <Route path="/albums/:id" element={<TrackList tracksFunc={getTracksFromAlbum}/>}/>
                         <Route path="/composers" element={<Composers />}/>
-                        {/*<Route path="/composer/:id" />*/}
                         <Route path="/playlists" element={<Playlists />}/>
-                        <Route path="/playlist/:id" />
+                        <Route path="/playlists/:id" element={<TrackList tracksFunc={getTracksFromPlaylist}/>}/>
                         <Route path="/tracks" element={<Tracks />}/>
-                        {/*<Route path="/track/:id" />*/}
                         <Route path="/genres" element={<Genres />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
